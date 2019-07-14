@@ -1,0 +1,36 @@
+
+.Input {
+    position: relative;
+  }
+  
+  .Input-text {
+    display: block;
+    margin: 0.3125rem;
+    padding: 0.8rem 0.6rem;
+    color: inherit;
+    width: 379px;
+    height: 0.8rem;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: inherit;
+    line-height: 1.8;
+    border: none;
+    border-radius: 0.4rem;
+    transition: box-shadow 300ms;
+  }
+  
+  .Input-text::placeholder {
+    color: #B0BEC5;
+  }
+  
+  .Input-text:focus {
+    outline: none;
+    box-shadow: 0.2rem 0.8rem 1.6rem #5376ad;
+  }
+  
+  .Input-text:placeholder-shown + .Input-label {
+    visibility: hidden;
+    z-index: -1;
+  }
+
+  

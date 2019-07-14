@@ -1,0 +1,52 @@
+/*88888888888888 NAVIGATION BAR STYLING 88888888888*/
+
+.navBar {
+width:99.2%;
+height: 50px;
+position: fixed;
+bottom: 5px;
+background-color: rgb(80, 75, 74);
+}
+
+/*88888888888888888  MENU BUTTONS  8888888888888888*/
+.menubtn {
+    height:40px;
+    width:40px;
+    position:relative;
+    bottom: -3px;
+    left:5px;
+    margin: 2px;
+    background: rgb(255, 255, 255);
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border:none;    
+}
+
+.menubtn:hover{
+    background: rgb(255, 165, 165);
+}
+.menubtn:active{
+    background: rgb(245, 113, 113);
+}
+/**88888888888888888888888888888888888888888888888888*/
+/* .menubtn:focus{
+    background: rgb(194, 72, 72);
+} */
+.buggedBtnFML{
+    height: 38px;
+    width: 2.5rem;
+    position: relative;
+    bottom: 45px;
+    left: 361px;
+    margin: 0.125rem;
+    background: rgb(255, 255, 255);
+    -webkit-border-radius: 0.3125rem;
+    border-radius: 0.3125rem;
+    border: none;
+}
+.buggedBtnFML:hover{
+    background: rgb(255, 165, 165);
+}
+.buggedBtnFML:active{
+    background: rgb(245, 113, 113);
+}

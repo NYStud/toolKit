@@ -1,0 +1,58 @@
+/* Main CSS file */
+@import url('https://fonts.googleapis.com/css?family=Dosis&display=swap');
+@import './styles/menu.css';
+@import './styles/loadingAnimation.css';
+@import './styles/virusTotal.css';
+@import './styles/inputform.css';
+
+/*8888888888888888888888888  MAIN BACKGROUND  888888888888888888*/
+
+body{
+    background-image: url("../images/bg.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    font-family: 'Dosis', sans-serif;
+}
+
+/*888888888888888888888888  MENU BUTTON GRAPHICS 8888888888888888*/
+
+#neutrinoAPI{
+    background-image: url("../images/electricity.png");
+    background-size: 100%
+}
+#virusTotalAPI{
+    background-image: url("../images/scan.png");
+    background-size: 100%
+
+}
+#cveAPI{
+    background-image: url("../images/padlock.png");
+    background-size: 100%
+}
+#shiftComponent{
+    background-image: url("../images/notebook.png");
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+#vtsearchBtn{
+    
+    background-image: url("../images/play.png");
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/*88888888888888888888888888888888888888888888888888888888888888888*/
+
+#root{
+    height: 100%;
+}
+.stem{
+    position:absolute;
+    top:0px;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    vertical-align: middle;
+}
