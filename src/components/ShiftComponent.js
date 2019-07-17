@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Summary from './Summary'
+import Alert from './CustomAlert'
 var UUID = require('uuid-js')
 class Shift extends Component {
   constructor (props) {
@@ -10,7 +11,8 @@ class Shift extends Component {
       sumText: '',
       ticketsArray: [],
       ticketsInStorage: [],
-      summaryWindow: ''
+      summaryWindow: '',
+      alertWindow: ''
     }
   }
 
@@ -52,6 +54,29 @@ class Shift extends Component {
     }
   }
 
+  alertClose () {
+    this.setState({
+      alertWindow: ''
+    })
+    let sfdiv = document.getElementById('ShiftContainer2')
+    let descendents = sfdiv.getElementsByTagName('*')
+    for (let i = 0; i < descendents.length; i++) {
+      descendents[i].setAttribute('style', 'pointer-events: auto; opacity:1;')
+    }
+  }
+
+  componentDidUpdate () {
+    let alert = document.getElementsByClassName('alert')
+    let summary = document.getElementsByClassName('Summary')
+    if (alert.length > 0 || summary.length > 0) {
+      let sfdiv = document.getElementById('ShiftContainer2')
+      let descendents = sfdiv.getElementsByTagName('*')
+      for (let i = 0; i < descendents.length; i++) {
+        descendents[i].setAttribute('style', 'pointer-events: none; opacity:0.4;')
+      }
+    }
+  }
+
   addTicket () {
     let uuid = UUID.create()
     let n = new Date()
@@ -59,13 +84,20 @@ class Shift extends Component {
     let m = n.getMonth() + 1
     let d = n.getDate()
     let date = d + '/' + m + '/' + y
-
-    let promise = new Promise(resolve => {
-      resolve(this.setState(prevState => ({
-        ticketsArray: [...prevState.ticketsArray, { 'uuid': uuid.hex, 'sumtype': this.state.sumType, 'sumtext': this.state.sumText, 'sumticket': this.state.ticket, 'date': date }]
-      })))
-    })
-    promise.then(() => window.localStorage.setItem('Tickets', JSON.stringify(this.state.ticketsArray)))
+    if (this.state.sumText.length < 4 || this.state.sumType.length < 4 || this.state.ticket.length < 4 || document.getElementById('shiftSum2day').value === '') {
+      let msg = 'Needs ticket type, ticket summary and ticket number, in the form xxx-xxx-xxx'
+      this.setState({
+        alertWindow: <Alert msgStrong='Wrong Input! ' actualMsg={msg} clickCloseAlert={this.alertClose.bind(this)} spanPseudoButtonClose='&#x2717;' />
+      })
+    } else {
+      let promise = new Promise(resolve => {
+        resolve(this.setState(prevState => ({
+          ticketsArray: [...prevState.ticketsArray, { 'uuid': uuid.hex, 'sumtype': this.state.sumType, 'sumtext': this.state.sumText, 'sumticket': this.state.ticket, 'date': date }]
+        })))
+      })
+      promise.then(() => window.localStorage.setItem('Tickets', JSON.stringify(this.state.ticketsArray)))
+    }
+    document.getElementById('shiftSum2day').value = ''
   }
 
   search (e) {
@@ -94,28 +126,45 @@ class Shift extends Component {
     }
   }
 
-  delete () {
-    if (window.confirm('Are you sure?')) {
-      var temp = [...this.state.ticketsArray]
-      let alltrs = document.getElementsByClassName('ticketData')
-      for (let i = 0; i < alltrs.length; i++) {
-        if (alltrs[i].childNodes[0].checked === true) {
-        //  this.removeFromStorage(alltrs[i].id)
-          var index = temp.indexOf(alltrs[i].id)
-          temp.splice(index, 1)
-        }
-      }
-      let promise = new Promise(resolve => {
-        resolve(this.setState({
-          ticketsArray: temp
-        }))
-      })
+  deleteProxy () {
+    this.setState({
+      alertWindow: <Alert msgStrong='Delete! ' actualMsg='Are you sure you want to delete the selected?' clickCloseAlert={this.alertClose.bind(this)} spanPseudoButtonClose='&#x2717;'
+        clickOkAlert={this.delete.bind(this)} spanPseudoButtonOk='&#x2713;' />
+    })
+  }
 
-      promise.then(() => window.localStorage.setItem('Tickets', JSON.stringify(this.state.ticketsArray)))
-    } else {
-      this.uncheckAllboxes()
+  delete () {
+    var temp = [...this.state.ticketsArray]
+    let alltrs = document.getElementsByClassName('ticketData')
+    for (let i = 0; i < alltrs.length; i++) {
+      if (alltrs[i].childNodes[0].childNodes[0].checked === true) {
+        //  var index = temp.indexOf(alltrs[i].childNodes[0].childNodes[0].id)
+        console.log(alltrs[i].childNodes[0].childNodes[0].id)
+        var elementPos = temp.map(function (x) { return x.uuid }).indexOf(alltrs[i].childNodes[0].childNodes[0].id)
+        temp.splice(elementPos, 1)
+      }
     }
+    let promise = new Promise(resolve => {
+      resolve(this.setState({
+        ticketsArray: temp
+      }))
+    })
+
+    promise.then(() => window.localStorage.setItem('Tickets', JSON.stringify(this.state.ticketsArray)))
+
     this.uncheckAllboxes()
+    this.alertClose()
+  }
+
+  copySummary () {
+    document.getElementById('copyBtnS').innerHTML = 'Copied!'
+  }
+
+  exitSummaryC () {
+    this.setState({
+      summaryWindow: ''
+    })
+    this.alertClose()
   }
 
   export2DaysSummary () {
@@ -127,14 +176,16 @@ class Shift extends Component {
       let today = day + '/' + month + '/' + year
       let dateTds = document.getElementsByClassName('dateClass')
       let dateArray = []
+      console.log(today)
       for (let item of dateTds) {
+        console.log(item.innerHTML)
         if (item.textContent === today || item.innerHTML === today) {
           dateArray.push(item.parentNode.childNodes[1].textContent + '-' + item.parentNode.childNodes[2].textContent + '.(' + item.parentNode.childNodes[3].textContent + ')\n')
           let tmpStr = ''
           dateArray.forEach(element => {
             tmpStr += element
             this.setState({
-              summaryWindow: <Summary summaryTextArea={tmpStr} />
+              summaryWindow: <Summary summaryTextArea={tmpStr} copySummary={this.copySummary.bind(this)} exitSummary={this.exitSummaryC.bind(this)} />
             })
           })
         }
@@ -204,28 +255,36 @@ class Shift extends Component {
 
   render () {
     return (
-      <div className='CVEContainer'>
-        <textarea id='shiftSum2day' onChange={this.separateTicket.bind(this)} />
-        <input type='text' className='search' id='search' onChange={this.search.bind(this)} />
-        <button id='createSumBtn' onClick={this.addTicket.bind(this)}>Add ticket</button>
-        <button id='deleteSelected' onClick={this.delete.bind(this)} >Delete Selected</button>
-        <button id='exportTodaySum' onClick={this.export2DaysSummary.bind(this)} >Export Summary</button>
-        <table id='table'>
-          <tr>
-            <th id='selectionTd'><input type='checkbox' className='ckbxm' id='selectAll' onChange={this.handleSelection.bind(this)} /></th>
-            <th onClick={this.sortTicketType.bind(this, 0)}>Ticket Type</th>
-            <th>Summary</th>
-            <th>Ticket Number</th>
-            <th>Date</th>
-          </tr>
-          {this.state.ticketsArray.filter(v => v !== null).map((element, index) =>
-            <tr className='ticketData' id={element.uuid}><input type='checkbox' id={element.uuid} className='ckbx' /><td>{element.sumtype}</td>
-              <td>{element.sumtext}</td><td>{element.sumticket}</td><td className='dateClass'>{element.date}</td></tr>
-          )}
-          <div id='summaryDiv'>
-            {this.state.summaryWindow}
+      <div className='ShiftContainer' >
+        <div id='ShiftContainer2'>
+          <button className='closeBtn' id='closeBtn' onClick={this.props.clickClose} />
+          <textarea id='shiftSum2day' onChange={this.separateTicket.bind(this)} />
+          <button id='createSumBtn' onClick={this.addTicket.bind(this)} />
+          <button id='deleteSelected' onClick={this.deleteProxy.bind(this)} />
+          <button id='exportTodaySum' onClick={this.export2DaysSummary.bind(this)} />
+          <input type='text' className='search' id='search' placeholder='Search' onChange={this.search.bind(this)} />
+          <div className='tableDiv'>
+            <table id='table'>
+              <thead>
+                <tr>
+                  <th id='selectionTd'><input type='checkbox' className='ckbxm' id='selectAll' onChange={this.handleSelection.bind(this)} /></th>
+                  <th onClick={this.sortTicketType.bind(this, 0)}>Ticket Type</th>
+                  <th>Summary</th>
+                  <th>Ticket Number</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody key='a'>
+                {this.state.ticketsArray.filter(v => v !== null).map((element, index) =>
+                  <tr className='ticketData' key={index + 'b'} id={element.uuid}><td><input type='checkbox' id={element.uuid} className='ckbx' /></td><td>{element.sumtype}</td>
+                    <td>{element.sumtext}</td><td>{element.sumticket}</td><td className='dateClass'>{element.date}</td></tr>
+                )}</tbody></table>
           </div>
-        </table>
+        </div>
+        <div id='summaryDiv'>
+          {this.state.summaryWindow}
+        </div>
+        {this.state.alertWindow}
       </div>
     )
   }

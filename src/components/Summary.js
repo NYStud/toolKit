@@ -1,13 +1,23 @@
 import React from 'react'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 const Summary = (props) => {
   return (
     <div className='Summary'>
-      <button id='exitBtn' title='Exit' onClick={props.exit} />
-      <button id='copyBtn' title='Copy' onClick={props.copySummary} />
-      <textarea id='summaryTextArea' value={props.summaryTextArea} />
+      <CopyToClipboard text={props.summaryTextArea}
+      >
+
+        <button id='copyBtnS' title='Copy' onClick={props.copySummary}>Copy</button>
+      </CopyToClipboard>
+      <textarea readOnly id='summaryTextAreaExport' value={props.summaryTextArea} />
+      <button id='exitBtnS' title='Exit' onClick={props.exitSummary} />
     </div>
   )
 }
 
 export default Summary
+
+{ /* <CopyToClipboard text={this.state.textToCopy}
+onCopy={() => this.setState({ copied: true })}>
+<button className='copyText' id='copyText' onClick={this.copyTextToClipBoard.bind(this)}>Copy</button>
+</CopyToClipboard></div>} */ }

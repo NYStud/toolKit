@@ -6,6 +6,7 @@ height: 50px;
 position: fixed;
 bottom: 5px;
 background-color: rgb(80, 75, 74);
+z-index: 200;
 }
 
 /*88888888888888888  MENU BUTTONS  8888888888888888*/

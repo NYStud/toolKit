@@ -5,8 +5,7 @@ import ReactTooltip from 'react-tooltip'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 const ipRegex = require('ip-regex')
 const request = require('request')
-var textToCopy = ''
-// include https://www.npmjs.com/package/react-tooltip when implement @ work
+
 class VT extends Component {
   constructor (props) {
     super(props)
@@ -145,6 +144,7 @@ class VT extends Component {
   render () {
     return (
       <div className='VTContainer'>
+        <button className='closeBtn' id='closeBtn' onClick={this.props.clickClose} />
         <input data-tip data-for='vtinfo' type='text' className='Input-text' placeholder='Search VirusTotal' id='inputFieldVT' />
         <ReactTooltip id='vtinfo' place='bottom' type='dark' effect='float'>
           <p>You can search in VirusTotal for IPs,</p><p> URLs (including the http:// or https://) and domains (example.com)</p>

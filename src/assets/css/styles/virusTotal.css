@@ -1,7 +1,7 @@
 
 pre{
   position:absolute;
-    top:50px;
+    top:60px;
     left:2px;
     right:2px;
     bottom:60px;
@@ -18,7 +18,7 @@ pre{
 
 ::-webkit-scrollbar-track
 {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.116);
 }
 
 ::-webkit-scrollbar-thumb
