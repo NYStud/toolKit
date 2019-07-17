@@ -108,6 +108,8 @@ body{
   #createSumBtn{
     background-image: url("../images/plus-black-symbol.png");
     top:5px;
+    left: 840px;
+
   } 
 
   #deleteSelected{
@@ -118,15 +120,15 @@ body{
 
   #exportTodaySum {
     background-image: url("../images/export.png");
-    top: 104px;
-    right: 0.9rem;
+    top: 5px;
+    left: 871px;
     z-index: 99;
 }
 
 #exitBtnS{
-  position: fixed;
-  top: 201px;
-  right: 193px;
+  position: relative;
+  top: -183px;
+  left: 774px;
   height: 1.25rem;
   width: 1.25rem;
   border: none;
@@ -138,19 +140,28 @@ body{
 }
 
 #copyBtnS{
-  position: fixed;
-  top: 12.5625rem;
-  right: 13.29rem;
+  position: relative;
+  top: -3px;
+  right: -714px;
   z-index: 100;
   height: 1.25rem;
   width: 56px;
   margin-right: 0.3125rem;
   border: none;
   border-radius: 0.1875rem;
+  font-family: 'Dosis', sans-serif;
+  font-size: 14px;
 }
 
 .tableDiv{
     height: 84%;
     margin-top: 26px;
     overflow-y: scroll;
+}
+
+#copyBtnS:hover, #exitBtnS:hover, #exportTodaySum:hover, #deleteSelected:hover, #createSumBtn:hover{
+  background-color: rgb(255, 165, 165);
+}
+#copyBtnS:active, #exitBtnS:active, #exportTodaySum:active, #deleteSelected:active, #createSumBtn:active{
+  background-color: rgba(255, 255, 255);
 }

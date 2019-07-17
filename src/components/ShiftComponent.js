@@ -12,7 +12,8 @@ class Shift extends Component {
       ticketsArray: [],
       ticketsInStorage: [],
       summaryWindow: '',
-      alertWindow: ''
+      alertWindow: '',
+      totalTickets: 0
     }
   }
 
@@ -24,13 +25,20 @@ class Shift extends Component {
     // TODO
   }
 
+  componentWillUnmount () {
+    window.copy(JSON.stringify(window.localStorage))
+  }
+
   loadTicketsFromStorage () {
+    let counter = 0
     let temp = JSON.parse(window.localStorage.getItem('Tickets'))
     if (temp !== null) {
       for (let i of temp) {
         if (i !== null) {
+          counter++
           this.setState(prevState => ({
-            ticketsArray: [...prevState.ticketsArray, { 'uuid': i.uuid, 'sumtype': i.sumtype, 'sumtext': i.sumtext, 'sumticket': i.sumticket, 'date': i.date }]
+            ticketsArray: [...prevState.ticketsArray, { 'uuid': i.uuid, 'sumtype': i.sumtype, 'sumtext': i.sumtext, 'sumticket': i.sumticket, 'date': i.date }],
+            totalTickets: counter
           }))
         }
       }
@@ -261,6 +269,7 @@ class Shift extends Component {
           <textarea id='shiftSum2day' onChange={this.separateTicket.bind(this)} />
           <button id='createSumBtn' onClick={this.addTicket.bind(this)} />
           <button id='deleteSelected' onClick={this.deleteProxy.bind(this)} />
+          <span id='totalTickets'><strong>Total tickets: </strong>{this.state.totalTickets}</span>
           <button id='exportTodaySum' onClick={this.export2DaysSummary.bind(this)} />
           <input type='text' className='search' id='search' placeholder='Search' onChange={this.search.bind(this)} />
           <div className='tableDiv'>
@@ -268,10 +277,10 @@ class Shift extends Component {
               <thead>
                 <tr>
                   <th id='selectionTd'><input type='checkbox' className='ckbxm' id='selectAll' onChange={this.handleSelection.bind(this)} /></th>
-                  <th onClick={this.sortTicketType.bind(this, 0)}>Ticket Type</th>
+                  <th id='typeth' onClick={this.sortTicketType.bind(this, 1)}>Ticket Type</th>
                   <th>Summary</th>
-                  <th>Ticket Number</th>
-                  <th>Date</th>
+                  <th id='ticketnumth'>Ticket Number</th>
+                  <th id='dateth' onClick={this.sortTicketType.bind(this, 4)} >Date</th>
                 </tr>
               </thead>
               <tbody key='a'>
