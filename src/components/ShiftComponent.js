@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import Summary from './Summary'
 import Alert from './CustomAlert'
+import ReactTooltip from 'react-tooltip'
 var UUID = require('uuid-js')
+const fse = require('fs-extra')
+const { dialog } = require('electron').remote
 class Shift extends Component {
   constructor (props) {
     super(props)
@@ -21,12 +24,17 @@ class Shift extends Component {
     this.loadTicketsFromStorage()
   }
 
-  writeTicketsToTextfile (data) {
-    // TODO
-  }
-
   componentWillUnmount () {
-    window.copy(JSON.stringify(window.localStorage))
+    let file = 'file.txt'
+    fse.outputFile(file, JSON.stringify(window.localStorage), err => {
+      console.log(err) // => null
+
+      // fse.readFile(file, 'utf8', (err, data) => {
+      //   if (err) return console.error(err)
+      //   console.log(data) // => hello!
+      // })
+    })
+    // (JSON.stringify(window.localStorage))
   }
 
   loadTicketsFromStorage () {
@@ -85,7 +93,7 @@ class Shift extends Component {
     }
   }
 
-  addTicket () {
+  createTicket () {
     let uuid = UUID.create()
     let n = new Date()
     let y = n.getFullYear()
@@ -100,12 +108,17 @@ class Shift extends Component {
     } else {
       let promise = new Promise(resolve => {
         resolve(this.setState(prevState => ({
-          ticketsArray: [...prevState.ticketsArray, { 'uuid': uuid.hex, 'sumtype': this.state.sumType, 'sumtext': this.state.sumText, 'sumticket': this.state.ticket, 'date': date }]
+          ticketsArray: [...prevState.ticketsArray, { 'uuid': uuid.hex, 'sumtype': this.state.sumType, 'sumtext': this.state.sumText, 'sumticket': this.state.ticket, 'date': date }],
+          totalTickets: this.state.totalTickets + 1
         })))
       })
       promise.then(() => window.localStorage.setItem('Tickets', JSON.stringify(this.state.ticketsArray)))
     }
     document.getElementById('shiftSum2day').value = ''
+  }
+
+  addTicket () {
+    this.createTicket()
   }
 
   search (e) {
@@ -135,10 +148,28 @@ class Shift extends Component {
   }
 
   deleteProxy () {
-    this.setState({
-      alertWindow: <Alert msgStrong='Delete! ' actualMsg='Are you sure you want to delete the selected?' clickCloseAlert={this.alertClose.bind(this)} spanPseudoButtonClose='&#x2717;'
-        clickOkAlert={this.delete.bind(this)} spanPseudoButtonOk='&#x2713;' />
-    })
+    let alltrs = document.getElementsByClassName('ticketData')
+    let checkIfChecked = false
+    for (let i = 0; i < alltrs.length; i++) {
+      if (alltrs[i].childNodes[0].childNodes[0].checked === true) {
+        checkIfChecked = true
+        break
+      } else {
+        checkIfChecked = false
+      }
+    }
+
+    if (checkIfChecked === false) {
+      this.setState({
+        alertWindow: <Alert msgStrong='' actualMsg='Nothing selected!' clickCloseAlert={this.alertClose.bind(this)} spanPseudoButtonClose='&#x2717;'
+        />
+      })
+    } else if (checkIfChecked === true) {
+      this.setState({
+        alertWindow: <Alert msgStrong='Delete! ' actualMsg='Are you sure you want to delete the selected?' clickCloseAlert={this.alertClose.bind(this)} spanPseudoButtonClose='&#x2717;'
+          clickOkAlert={this.delete.bind(this)} spanPseudoButtonOk='&#x2713;' />
+      })
+    }
   }
 
   delete () {
@@ -261,17 +292,114 @@ class Shift extends Component {
     }
   }
 
+  importToStorage () {
+    var input = document.createElement('input')
+    input.type = 'file'
+
+    input.onchange = e => {
+      // getting a hold of the file reference
+      var file = e.target.files[0]
+
+      // setting up the reader
+      var reader = new window.FileReader()
+      reader.readAsText(file, 'UTF-8')
+
+      // here we tell the reader what to do when it's done reading...
+      reader.onload = readerEvent => {
+        var content = readerEvent.target.result // this is the content!
+        var data = JSON.parse(content)
+        Object.keys(data).forEach(function (k) {
+          window.localStorage.setItem(k, data[k])
+        })
+        window.location.reload()
+      }
+    }
+
+    input.click()
+  }
+
+  importFromTxt () {
+    let uuid = UUID.create()
+    let n = new Date()
+    let y = n.getFullYear()
+    let m = n.getMonth() + 1
+    let d = n.getDate()
+    let date = d + '/' + m + '/' + y
+    let chosenFiles = dialog.showOpenDialog()
+    let splitLines = []
+    let splitTickets = []
+    let ticketnumber = ''
+    fse.readFile(chosenFiles[0], 'utf8', (err, data) => {
+      if (err) return console.error(err)
+      splitLines = data.split('\n')
+      splitLines.forEach(e => {
+        splitTickets = e.split('-')
+        ticketnumber = splitTickets[2].replace('(', '')
+        ticketnumber = ticketnumber.replace(')', '')
+        if (splitTickets[0] !== '') {
+          if (splitTickets[0].length > 3 || splitTickets[1].length > 3 || splitTickets[2].length > 3) {
+            uuid = UUID.create()
+            let promise = new Promise(resolve => {
+              resolve(this.setState(prevState => ({
+                ticketsArray: [...prevState.ticketsArray, { 'uuid': uuid.hex, 'sumtype': splitTickets[0], 'sumtext': splitTickets[1], 'sumticket': ticketnumber, 'date': date }]
+              })))
+            })
+            promise.then(() => window.localStorage.setItem('Tickets', JSON.stringify(this.state.ticketsArray)))
+          }
+        }
+      })
+    })
+  }
+
+  exportToTxt () {
+    let chosenDirectory = dialog.showSaveDialog()
+    let ticket = ''
+    this.state.ticketsArray.forEach(e => {
+      ticket += e.sumtype + '-' + e.sumtext + '-' + e.sumticket + '\n'
+    })
+    fse.outputFile(chosenDirectory, ticket, err => {
+      console.log(err) // => null
+
+      // fse.readFile(chosenDirectory, 'utf8', (err, data) => {
+      //   if (err) return console.error(err)
+      //   console.log(data) // => hello!
+      // })
+    })
+  }
+  exportStorageFile () {
+    let chosenDirectory = dialog.showSaveDialog()
+    let jsonFormat = JSON.stringify(window.localStorage)
+
+    fse.outputFile(chosenDirectory, jsonFormat, err => {
+      console.log(err)
+    })
+  }
+
+  addWithEnter (e) {
+    if (e.key === 'Enter') {
+      this.createTicket()
+      e.preventDefault()
+    }
+  }
+
   render () {
     return (
       <div className='ShiftContainer' >
         <div id='ShiftContainer2'>
-          <button className='closeBtn' id='closeBtn' onClick={this.props.clickClose} />
-          <textarea id='shiftSum2day' onChange={this.separateTicket.bind(this)} />
-          <button id='createSumBtn' onClick={this.addTicket.bind(this)} />
-          <button id='deleteSelected' onClick={this.deleteProxy.bind(this)} />
-          <span id='totalTickets'><strong>Total tickets: </strong>{this.state.totalTickets}</span>
-          <button id='exportTodaySum' onClick={this.export2DaysSummary.bind(this)} />
-          <input type='text' className='search' id='search' placeholder='Search' onChange={this.search.bind(this)} />
+          <button className='closeBtn' title='Close the component' id='closeBtn' onClick={this.props.clickClose} />
+          <textarea data-tip data-for='shiftInfo' id='shiftSum2day' onKeyPress={this.addWithEnter.bind(this)} onChange={this.separateTicket.bind(this)} />
+          <ReactTooltip id='shiftInfo' place='bottom' type='dark' effect='float'>
+            <p>You can create tickets by adding a ticket type, a ticket summary and a ticket number (xxx-xxx-xxx),</p><p> example: Webproxy:please whitelist 9gag for me-Request NOT sent to proxy team!-234234534</p>
+          </ReactTooltip>
+          <button id='createSumBtn' title='Add a ticket' onClick={this.addTicket.bind(this)} />
+          <button id='deleteSelected' title='Delete selected ticket/s' onClick={this.deleteProxy.bind(this)} />
+          <button id='importToStorage' title='Import from storage file' onClick={this.importToStorage.bind(this)} />
+          <button id='importFromTxt' title='Import tickets from text file' onClick={this.importFromTxt.bind(this)} />
+          <button id='exportToTxt' title='Export tickets to text file' onClick={this.exportToTxt.bind(this)} />
+          <button id='exportStorageFile' title='Export storage file manually' onClick={this.exportStorageFile.bind(this)} />
+          <span id='totalTickets'><strong>Total tickets: {this.state.totalTickets}</strong></span>
+          <button id='exportTodaySum' title='Export tickets from today' onClick={this.export2DaysSummary.bind(this)} />
+          <input type='text' title='Search for anything' className='search' id='search' placeholder='Search' onChange={this.search.bind(this)} />
           <div className='tableDiv'>
             <table id='table'>
               <thead>

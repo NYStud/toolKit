@@ -58,6 +58,7 @@ body{
     right:0px;
     bottom:0px;
     vertical-align: middle;
+    overflow: hidden;
 }
 
 .ShiftContainer,.VTContainer, .CVEContainer{
@@ -91,14 +92,15 @@ body{
   .closeBtn:active {
     background-color: rgba(255, 255, 255, 0.548);
   }
+  
 
-  #createSumBtn, #deleteSelected, #exportTodaySum {
+  #createSumBtn, #deleteSelected, #exportTodaySum, #importToStorage, #importFromTxt, #exportToTxt, #exportStorageFile {
     background-size: 80%;
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 3px;
-    height: 25px;
-    width: 25px;
+    height: 1.75rem;
+    width: 1.75rem;
     border: none;
     margin: 1px;
     position: absolute;
@@ -109,21 +111,55 @@ body{
     background-image: url("../images/plus-black-symbol.png");
     top:5px;
     left: 840px;
+    height: 60px;
+  }
 
-  } 
+  #exportStorageFile{
+    background-image: url("../images/share.png");
+    top: 0.3rem;
+    left: 60.53rem;
+    height: 1.79rem;
+    width: 1.8rem;
+  }
+
+  #importFromTxt{
+    background-image: url("../images/importTxt.png");
+    top: 2.3rem;
+    left: 58.4375rem;
+    height: 1.79rem;
+    width: 1.8rem;
+  }
+  #exportToTxt{
+    background-image: url("../images/export-file.png");
+    top: 2.3rem;
+    left: 60.53rem;
+    height: 1.79rem;
+    width: 1.8rem;
+  }
+
+  #importToStorage{
+    background-image: url("../images/import.png");
+    top: 0.3rem;
+    left: 58.4375rem;
+    height: 1.79rem;
+    width: 1.8rem;
+  }
 
   #deleteSelected{
     background-image: url("../images/delete.png");
-    top: 40px;
+    top: 0.3125rem;
     left: 52.5rem;
+    height: 60px;
+    left: 54.5rem;
   } 
 
   #exportTodaySum {
     background-image: url("../images/export.png");
     top: 5px;
-    left: 871px;
+    left: 56.475rem;
     z-index: 99;
-}
+    height: 3.75rem;
+  }
 
 #exitBtnS{
   position: relative;
@@ -159,9 +195,9 @@ body{
     overflow-y: scroll;
 }
 
-#copyBtnS:hover, #exitBtnS:hover, #exportTodaySum:hover, #deleteSelected:hover, #createSumBtn:hover{
+#copyBtnS:hover, #exitBtnS:hover, #exportTodaySum:hover, #deleteSelected:hover, #createSumBtn:hover,#importToStorage:hover, #importFromTxt:hover, #exportToTxt:hover, #exportStorageFile:hover{
   background-color: rgb(255, 165, 165);
 }
-#copyBtnS:active, #exitBtnS:active, #exportTodaySum:active, #deleteSelected:active, #createSumBtn:active{
+#copyBtnS:active, #exitBtnS:active, #exportTodaySum:active, #deleteSelected:active, #createSumBtn:active,#importToStorage:active, #importFromTxt:active, #exportToTxt:active,#exportStorageFile:active{
   background-color: rgba(255, 255, 255);
 }
