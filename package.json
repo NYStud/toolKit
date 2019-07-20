@@ -51,6 +51,7 @@
     "ip-regex": "^4.1.0",
     "node-virustotal": "^2.5.0",
     "object-assign": "^4.1.1",
+    "python-shell": "^1.0.7",
     "react": "^16.8.6",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.6",

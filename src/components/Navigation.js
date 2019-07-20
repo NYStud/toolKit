@@ -1,12 +1,10 @@
 import React from 'react'
+import appdata from '../data/AppList'
 
 const Navigation = (props) => {
   return (
     <div className='navBar'>
-      <button className='menubtn' id='neutrinoAPI' title='Neutrino' onClick={props.clickNeutrino} />
-      <button className='menubtn' id='virusTotalAPI' title='VirusTotal' onClick={props.clickVT} />
-      <button className='menubtn' id='cveAPI' title='CVE DBs' onClick={props.clickCVEAPI} />
-      <button className='menubtn' id='shiftComponent' title='Shift' onClick={props.clickShiftSummaryComponent} />
+      {appdata.map(item => <button key={item.id} className='menubtn' id={item.id} title={item.name} onClick={() => props.onClickApp(item.name)} />)}
     </div>
   )
 }

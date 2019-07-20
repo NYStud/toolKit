@@ -85,11 +85,6 @@ table {
   #selectionTd{
     width:20px;
   }
-  
-  #inputArea, #outputArea {
-    width: 99%;
-    height: 80%;
-  }
 
   .Summary {
       position: relative;

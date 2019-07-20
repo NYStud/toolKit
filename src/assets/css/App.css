@@ -7,6 +7,7 @@
 @import './styles/cve.css';
 @import './styles/shiftSum.css';
 @import './styles/alert.css';
+@import './styles/operationsCocktail.css';
 
 /*8888888888888888888888888  MAIN BACKGROUND  888888888888888888*/
 
@@ -37,6 +38,12 @@ body{
     background-size: 90%;
     background-repeat: no-repeat;
     background-position: center;
+}
+#opCoComponent{
+  background-image: url("../images/shuffle.png");
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 #vtsearchBtn,#cveBtn{
     
@@ -82,6 +89,7 @@ body{
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 3px;
+    z-index: 100;
   }
 
   .closeBtn:hover {

@@ -11363,6 +11363,11 @@ purepack@>=1.0.4:
   resolved "https://registry.yarnpkg.com/purepack/-/purepack-1.0.5.tgz#6520678a264b5a2823051d059c1205d21f54e81f"
   integrity sha512-Amc1FB7Xyp/qFAHfr6NzrvMgUJ4Qc7dd4TteEBmXtPxxz1iRBUHjMKdgVRqviSIjb3u5yuylWcsijGVbKHfffg==
 
+python-shell@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/python-shell/-/python-shell-1.0.7.tgz#40cf1bea92c888122e3812d1dee809227ecb1212"
+  integrity sha512-k6s27Uj5WEAxFLRKLFUvlDCm1GpkmAQ4vg9CASgqwbHqAM1d1x3nh3bzlBKgmRwNDeLlu0DP41CqwRZn1DKtuA==
+
 q@^1.1.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
