@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 import Loading from './loadingAnim'
-import JSONPretty from 'react-json-prettify'
 import ReactTooltip from 'react-tooltip'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+
+// ===================== //
+// IMPORT THE COMPONENT  //
+// ===================== //
+import JsonToTable from './jsontotable/JsonToTable'
 const ipRegex = require('ip-regex')
 const request = require('request')
 
@@ -31,7 +35,11 @@ class VT extends Component {
 
   }
 
-  amandaFunction () {
+  decider () {
+    let button = document.getElementById('copyText')
+    if (button != null) {
+      button.textContent = 'Copy'
+    }
     let input = document.getElementById('inputFieldVT').value
     if ((ipRegex({ exact: true }).test(input)) === true) {
       this.ipreport()
@@ -50,7 +58,7 @@ class VT extends Component {
       console.log(response)
       var result = JSON.parse(body)
       that.setState({
-        reportString: <JSONPretty json={result} padding={1} />,
+        reportString: <JsonToTable json={result} />,
         textToCopy: JSON.stringify(result, undefined, 2),
         ipreportshow: true
       })
@@ -65,7 +73,7 @@ class VT extends Component {
       console.log(response)
       var result = JSON.parse(body)
       that.setState({
-        reportString: <JSONPretty id='pretty' json={result} padding={1} />,
+        reportString: <JsonToTable json={result} />,
         textToCopy: JSON.stringify(result, undefined, 2),
         ipreportshow: true
       })
@@ -104,7 +112,7 @@ class VT extends Component {
       res.push(breaky)
       for (let key in result.scans) {
         if (result.scans[key].detected === true) {
-          let resulto = <div className='res' ><div>{key + ': '} </div>{result.scans[key].result}</div>
+          let resulto = <div className='res' ><div><strong>{key + ': '}</strong><span>{result.scans[key].result}</span></div></div>
           res.push(resulto)
         }
       }
@@ -149,14 +157,14 @@ class VT extends Component {
         <ReactTooltip id='vtinfo' place='bottom' type='dark' effect='float'>
           <p>You can search in VirusTotal for IPs,</p><p> URLs (including the http:// or https://) and domains (example.com)</p>
         </ReactTooltip>
-        <button className='buggedBtnFML' id='vtsearchBtn'onClick={this.amandaFunction.bind(this)} />
+        <button className='buggedBtnFML' id='vtsearchBtn'onClick={this.decider.bind(this)} />
         <div id='responseArea'>
           {this.state.responseURLscanArray.map((res, index) => {
             return res
           }
           )}
         </div>
-        {this.state.ipreportshow && <div>
+        {this.state.ipreportshow && <div id='tableDiv'>
           {this.state.reportString}
           {this.state.loadingDiv}
           <CopyToClipboard text={this.state.textToCopy}

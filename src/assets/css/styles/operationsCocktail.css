@@ -1,4 +1,4 @@
-.cocktailContainer{
+.cocktailContainer, #containerContent{
     margin-top: 30px;
     width: 100%;
     height: 90%;
@@ -24,6 +24,7 @@ resize: none;
     width: 9%;
     float:left; /* add this */
     /* border: 1px solid red; */
+    margin-right: 7px;
 }
 
 .operations .selectedOperation {
@@ -35,6 +36,7 @@ resize: none;
     float: left; /* add this */
     width: 80%;
     height:100%;
+    margin-right: 15px;
 }
 
 .operation {
@@ -51,10 +53,10 @@ resize: none;
     position: relative;
     /* border: 1px solid green; */
     float: left; /* add this */
-    width: 10%;
+    width: 7%;
 }
 
-#action {
+.action {
     background-color: rgba(101, 101, 133, 0.514);
     padding: 12px;
     margin: 0.5px;
@@ -65,11 +67,11 @@ resize: none;
     user-select: none;
 }
 
-.operation:hover,#action:hover{
+.operation:hover,.action:hover{
     background-color: rgba(160, 160, 204, 0.514);
 }
 
-.operation:active,#action:active{
+.operation:active,.action:active{
     background-color: rgba(201, 201, 226, 0.733);
 }
 

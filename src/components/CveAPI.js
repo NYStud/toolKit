@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import JSONPretty from 'react-json-prettify'
 import ReactTooltip from 'react-tooltip'
+import JsonToTable from './jsontotable/JsonToTable'
 const request = require('request')
 class CVE extends Component {
   constructor (props) {
@@ -22,7 +22,7 @@ class CVE extends Component {
       console.log('RESPONSE  ' + response)
       var result = JSON.parse(body)
       that.setState({
-        msbulettinId: <JSONPretty json={result} padding={2} />
+        msbulettinId: '<JsonToTable json={result} />'
       })
     })
   }
@@ -35,7 +35,7 @@ class CVE extends Component {
       console.log('RESPONSE  ' + response)
       var result = JSON.parse(body)
       that.setState({
-        reportStringApi: <JSONPretty json={result} padding={2} />,
+        reportStringApi: '<JsonToTable json={result} />',
         startedSearching: true
       })
     })
@@ -48,8 +48,9 @@ class CVE extends Component {
       console.log('ERROR  ' + error)
       console.log('RESPONSE  ' + response)
       var result = JSON.parse(body)
+      console.log(result)
       that.setState({
-        reportStringMitre: <JSONPretty json={result} padding={2} />,
+        reportStringMitre: <JsonToTable json={result.cve.affects.vendor.vendor_data[0]} />,
         startedSearching: true
       })
     })

@@ -2,9 +2,13 @@
     padding: 20px;
     background-color: #f44336;
     color: white;
-    position: absolute;
-    top:20%;
-    left: 35%;
+    width:200px;
+
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		margin-top: -100px;
+		margin-left: -100px;
   }
   
   .closebtn, .okbtn {

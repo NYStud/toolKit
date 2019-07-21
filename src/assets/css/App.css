@@ -209,3 +209,8 @@ body{
 #copyBtnS:active, #exitBtnS:active, #exportTodaySum:active, #deleteSelected:active, #createSumBtn:active,#importToStorage:active, #importFromTxt:active, #exportToTxt:active,#exportStorageFile:active{
   background-color: rgba(255, 255, 255);
 }
+
+#tableDiv {
+  height:90%;
+  overflow-y:scroll;
+}
