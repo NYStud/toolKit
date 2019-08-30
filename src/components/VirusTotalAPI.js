@@ -14,7 +14,7 @@ class VT extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      key: 'd22fbaf1ea7371d8f1c33fe2df12b77c202497031550f91c1e2217b22ed1bdab',
+      key: 'THAKEY',
       cors: 'https://cors-anywhere.herokuapp.com/',
       urlscan: 'https://www.virustotal.com/vtapi/v2/url/scan',
       urlreport: 'https://www.virustotal.com/vtapi/v2/url/report',
